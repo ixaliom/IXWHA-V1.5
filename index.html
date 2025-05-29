@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IXWHA | Gestionnaire de Lecture de Manhwas | Suivi et Organisation</title>
+    <meta name="description" content="IXWHA - Votre gestionnaire de lecture de manhwas gratuit et sans publicité. Organisez votre bibliothèque, suivez votre progression, synchronisez hors-ligne.Lien Auto Compatible Phenix Scans.">
+    <meta name="keywords" content="manhwa, webtoon, manga, lecture, suivi, progression, bibliothèque, phenix scans, hors ligne, ixwha">
+    <meta name="author" content="IXWHA">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ixwha.vercel.app/">
+    <meta property="og:title" content="IXWHA - Gestionnaire de Lecture de Manhwas">
+    <meta property="og:description" content="Organisez et suivez votre lecture de manhwas avec IXWHA. Gratuit, sans pub, et fonctionne hors-ligne !">
+    <meta property="og:image" content="https://ixwha.vercel.app/logo.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ixwha.vercel.app/">
+    <meta property="twitter:title" content="IXWHA - Gestionnaire de Lecture de Manhwas">
+    <meta property="twitter:description" content="Organisez et suivez votre lecture de manhwas avec IXWHA. Gratuit, sans pub, et fonctionne hors-ligne !">
+    <meta property="twitter:image" content="https://ixwha.vercel.app/logo.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#7047EB">
+    <meta name="apple-mobile-web-app-title" content="IXWHA">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-152x152.png">
+    <link rel="apple-touch-startup-image" href="icons/icon-512x512.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="icons/icon-512x512.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="icons/icon-512x512.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="icons/icon-512x512.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="manifest" href="manifest.json">
+    <meta name="google-site-verification" content="P1uRFq87adzXdIPZUF6TAQAKGY9sztyiCrbzC_XG_ZU" />
+
+    <link rel="canonical" href="https://ixwha.vercel.app/">
+
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://phenix-scans.com">
+    <link rel="dns-prefetch" href="https://phenix-scans.com">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "IXWHA",
+      "description": "Gestionnaire de lecture de manhwas avec support hors-ligne",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "featureList": [
+        "Suivi de progression de lecture",
+        "Support hors-ligne",
+        "Organisation en catégories",
+        "Extraction automatique des informations"
+      ]
+    }
+    </script>
+</head>
+<body>
+    <header class="header" role="banner">
+        <div class="container header-content">
+            <div class="site-logo" role="img" aria-label="Logo IXWHA">
+                <svg width="120" height="32" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 6V26" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20 6L32 26M32 6L20 26" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M44 6L50 20L56 10L62 20L68 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M80 6V26M92 6V26M80 16H92" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M104 26L112 6L120 26M107 18H117" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="app-version" class="version-tag" aria-label="Version de l'application">1.5.7</span>
+                </div>
+
+            <div class="search-box" role="search">
+                <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un titre..." aria-label="Rechercher un manhwa">
+            </div>
+
+            <nav class="profile-section" role="navigation" aria-label="Navigation principale">
+                <button class="refresh-button" id="refreshButton" title="Vérifier les nouveaux chapitres" aria-label="Vérifier les nouveaux chapitres">🔄</button>
+                <button class="settings-button" id="settingsButton" title="Paramètres" aria-label="Ouvrir les paramètres">⚙️</button>
+                <button class="help-button" id="helpButton" aria-label="Aide et raccourcis clavier">⌨️​</button>
+                <a href="/profil" class="profile-button" aria-label="Accéder au profil">
+                    <div class="profile-avatar" aria-hidden="true">P</div>
+                    <span>Profil</span>
+                </a>
+                </nav>
+        </div>
+    </header>
+
+    <main class="container" role="main">
+        <nav class="tabs" role="tablist" aria-label="Catégories de manhwas">
+            <button class="tab active" data-tab="all" role="tab" aria-selected="true" aria-controls="all-panel">En cours</button>
+            <button class="tab" data-tab="completed" role="tab" aria-selected="false" aria-controls="completed-panel">Terminés</button>
+            <button class="tab" data-tab="dropped" role="tab" aria-selected="false" aria-controls="dropped-panel">Abandonnés</button>
+            <button class="tab" data-tab="favorites" role="tab" aria-selected="false" aria-controls="favorites-panel">Favoris</button>
+        </nav>
+
+        <section class="library" id="library" role="tabpanel" aria-label="Liste des manhwas"></section>
+        </main>
+
+    <footer role="contentinfo">
+        <button class="add-button" id="addButton" aria-label="Ajouter un manhwa">+</button>
+        <button class="legal-button" id="legalButton" aria-label="Voir les mentions légales">Mentions légales</button>
+        </footer>
+
+<div class="modal" id="welcomeModal">
+    <div class="modal-content welcome-modal">
+        <h2>Bienvenue sur IXWHA ! 📚</h2>
+        <p>Gérez facilement votre progression de lecture de manhwas avec une interface simple et rapide.</p>
+
+        <div class="welcome-steps">
+            <h3>Comment utiliser IXWHA :</h3>
+            <ol>
+                <li>
+                    <div class="step-number">1</div>
+                    <div>Cliquez sur le bouton <strong>+</strong> en bas à droite pour ajouter un manhwa.</div>
+                </li>
+                <li>
+                    <div class="step-number">2</div>
+                    <div>Renseignez <strong>Uniquement</strong> l'<strong>URL de lecture</strong> et les autres informations sont <strong>Affichées automatiquement</strong>.</div>
+                </li>
+                <li>
+                    <div class="step-number">3</div>
+                    <div>Utilisez les <strong>onglets "En cours" / "Terminés" / "Abandonnee" / "Favoris"</strong> pour filtrer votre collection.</div>
+                </li>
+                <li>
+                    <div class="step-number">4</div>
+                    <div>Cliquez sur un manhwa pour <strong>cocher les chapitres lus</strong>.</div>
+                </li>
+                <li>
+                    <div class="step-number">5</div>
+                    <div>Utilisez le bouton <strong>"Lire"</strong> pour accéder directement à la lecture en ligne.</div>
+                </li>
+                <li>
+                    <div class="step-number">6</div>
+                    <div>Recherchez rapidement un manhwa avec la <strong>barre de recherche</strong>.</div>
+                </li>
+                <li>
+                    <div class="step-number">7</div>
+                    <div>Consultez votre <strong>profil</strong> ou les <strong>mentions légales</strong> via les boutons prévus.</div>
+                </li>
+            </ol>
+        </div>
+
+        <p class="small-note">📌 Vos données sont stockées localement sur votre navigateur et ne sont partagées avec aucun service externe.</p>
+        <button class="button" id="welcomeCloseBtn">Commencer</button>
+    </div>
+</div>
+
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Ajouter un manhwa</h2>
+        <form id="manhwaForm">
+            <div class="form-group">
+                <label for="titleInput">Titre (optionnel)</label>
+                <input type="text" id="titleInput">
+            </div>
+            <div class="form-group">
+                <label for="coverInput">URL de la couverture (optionnel)</label>
+                <input type="text" id="coverInput">
+            </div>
+            <div class="form-group">
+                <label for="readUrlInput">URL du site de lecture</label>
+                <input type="url" id="readUrlInput" required>
+                </div>
+            <div class="form-group">
+                <label for="chaptersInput">Nombre de chapitres (optionnel)</label>
+                <input type="number" id="chaptersInput" required min="1">
+                </div>
+            <div class="form-buttons">
+                <button type="submit" class="button">Sauvegarder</button>
+                <button type="button" class="button secondary" id="editCancelBtn">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="chaptersModal">
+    <div class="modal-content">
+        <h2 id="chaptersTitle"></h2>
+        <div class="chapters-grid" id="chaptersGrid"></div>
+        <div class="form-buttons">
+            <button class="button secondary" id="resetBtn">Réinitialiser</button>
+            <button class="button" id="closeChaptersBtn">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="resetProgressModal">
+    <div class="modal-content">
+        <h2>⚠️ Réinitialiser la progression</h2>
+        <p>Êtes-vous sûr de vouloir réinitialiser la progression de ce manhwa ? Cette action est irréversible.</p>
+        <div class="button-group">
+            <button class="button delete-button-confirm" id="confirmResetBtn">Réinitialiser</button>
+            <button class="button secondary" id="cancelResetBtn">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="legalModal">
+    <div class="modal-content">
+        <h2>Mentions Légales</h2>
+        <div class="legal-content">
+            <p><strong>Dernière mise à jour :</strong> 13 janvier 2025</p>
+
+            <h3>1. Présentation du service</h3>
+            <p>IXWHA est un service personnel de suivi de lecture de manhwas. Ce service est fourni à titre gratuit et est destiné à un usage personnel uniquement.</p>
+
+            <h3>2. Éditeur du service</h3>
+            <p>Nom de l'entreprise : IXWHA</p>
+
+            <h3>4. Responsabilité et contenu</h3>
+            <p>
+                - IXWHA décline toute responsabilité en cas d'erreur, d'omission ou d'inexactitude dans les informations disponibles sur le site.<br>
+                - Les manhwas mentionnés ou indexés ne sont pas hébergés par IXWHA mais référencés via des tiers.<br>
+                - IXWHA n'est pas responsable de tout contenu sous licence détenu par des ayants droit.<br>
+                - Ces données sont stockées localement sur votre navigateur et ne sont pas transmises à des tiers.
+            </p>
+
+            <h3>5. Propriété intellectuelle</h3>
+            <p>
+                Tous les éléments du site IXWHA sont protégés par les lois sur le droit d'auteur et la propriété intellectuelle.<br>
+                - Les manhwas référencés sont la propriété de leurs auteurs et éditeurs respectifs.
+            </p>
+
+            <h3>6. Protection des données personnelles</h3>
+            <p>
+                IXWHA s'engage à respecter la confidentialité des données de ses utilisateurs.<br>
+                • Conformément au RGPD, vous avez le droit de consulter, corriger ou supprimer vos données à tout moment.<br>
+                • Ce site utilise des cookies pour améliorer l'expérience utilisateur.
+            </p>
+        </div>
+        <div class="legal-buttons">
+            <button class="button" id="legalCloseBtn">Accepter Et Fermer</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="deleteModal">
+    <div class="modal-content">
+        <h2>Confirmer la suppression</h2>
+        <p>Êtes-vous sûr de vouloir supprimer ce manhwa ? Cette action est irréversible.</p>
+        <div class="button-group">
+            <button class="button delete-button-confirm" id="confirmDeleteBtn">Supprimer</button>
+            <button class="button secondary" id="cancelDeleteBtn">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="updateModal">
+    <div class="modal-content welcome-modal">
+        <h2>🎉 Mise à jour disponible !</h2>
+        <div id="updateContent">
+        </div>
+        <button class="button" id="updateCloseBtn">J'ai compris</button>
+    </div>
+</div>
+
+<div class="modal" id="helpModal">
+    <div class="modal-content">
+        <h2>Raccourcis clavier <span class="keyboard-icon">⌨️</span></h2>
+
+        <div class="shortcuts-content">
+            <div class="shortcut-section">
+                <h3>Navigation</h3>
+                <ul class="shortcut-list">
+                    <li>
+                        <span class="shorcut-label">Onglet "En cours"</span>
+                        <div class="shortcut-keys">
+                            <kbd>Alt</kbd><span class="key-separator">+</span><kbd>1</kbd>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="shortcut-label">Onglet "Terminés"</span>
+                        <div class="shortcut-keys">
+                            <kbd>Alt</kbd><span class="key-separator">+</span><kbd>2</kbd>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="shortcut-label">Onglet "Abandonnés"</span>
+                        <div class="shortcut-keys">
+                            <kbd>Alt</kbd><span class="key-separator">+</span><kbd>3</kbd>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="shortcut-label">Onglet "Favoris"</span>
+                        <div class="shortcut-keys">
+                            <kbd>Alt</kbd><span class="key-separator">+</span><kbd>4</kbd>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="shortcut-section">
+                <h3>Actions principales</h3>
+                <ul class="shortcut-list">
+                    <li>
+                        <span class="shortcut-label">Ajouter un manhwa</span>
+                        <div class="shortcut-keys">
+                            <kbd>A</kbd><span class="key-separator">ou</span><kbd>+</kbd>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="shortcut-label">Focus sur la recherche</span>
+                        <div class="shortcut-keys">
+                            <kbd>S</kbd>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="shortcut-label">Mentions légales</span>
+                        <div class="shortcut-keys">
+                            <kbd>L</kbd>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="shortcut-label">Fermer le modal actif</span>
+                        <div class="shortcut-keys">
+                            <kbd>Echap</kbd>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="shortcut-section">
+                <h3>Mode chapitres</h3>
+                <ul class="shortcut-list">
+                    <li>
+                        <span class="shortcut-label">Cocher le chapitre correspondant</span>
+                        <div class="shortcut-keys">
+                            <kbd>1</kbd><span class="key-separator">-</span><kbd>9</kbd>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="shortcut-label">Réinitialiser la progression</span>
+                        <div class="shortcut-keys">
+                            <kbd>R</kbd>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-buttons">
+                <button class="button" id="helpCloseBtn">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="summaryModal">
+    <div class="modal-content">
+        <h2>📊 Résumé de la vérification</h2>
+        <div class="update-summary">
+            <p id="summaryText"></p>
+            <ul class="update-list" id="updateList"></ul>
+        </div>
+        <div class="form-buttons">
+            <button class="button" onclick="this.closest('.modal').remove()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="settingsModal">
+    <div class="modal-content">
+        <h2>⚙️ Paramètres</h2>
+        <div class="settings-content">
+            <div class="settings-group">
+                <h3>Fonctionnalités</h3>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="refreshButtonToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                        <span class="setting-label">Bouton d'actualisation</span>
+                        <span class="setting-description">Active ou désactive le bouton de vérification des nouveaux chapitres</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="autoCheckToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                        <span class="setting-label">Vérification automatique</span>
+                        <span class="setting-description">Vérifie automatiquement les nouveaux chapitres au démarrage</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="notificationsToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                        <span class="setting-label">Notifications</span>
+                        <span class="setting-description">Active ou désactive les notifications système</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-group">
+                <h3>Apparence</h3>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                        <span class="setting-label">Mode sombre</span>
+                        <span class="setting-description">Change l'apparence de l'application en mode sombre</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="compactModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                        <span class="setting-label">Mode compact</span>
+                        <span class="setting-description">Réduit l'espacement entre les éléments</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="animationsToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                        <span class="setting-label">Animations</span>
+                        <span class="setting-description">Active ou désactive les animations de l'interface</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-group">
+                <h3>Affichage</h3>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Taille des cartes</span>
+                        <span class="setting-description">Modifie la taille d'affichage des cartes de manhwas</span>
+                    </div>
+                    <select id="cardSizeSelect" class="setting-select">
+                        <option value="small">Petite</option>
+                        <option value="medium" selected>Moyenne</option>
+                        <option value="large">Grande</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Tri par défaut</span>
+                        <span class="setting-description">Définit l'ordre d'affichage des manhwas</span>
+                    </div>
+                    <select id="defaultSortSelect" class="setting-select">
+                        <option value="title" selected>Titre</option>
+                        <option value="lastRead">Dernière lecture</option>
+                        <option value="progress">Progression</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-buttons">
+            <button class="button" id="settingsCloseBtn">Fermer</button>
+        </div>
+    </div>
+</div>
+
+    <script src="script.js"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Ixwha",
+      "url": "https://ixwha.vercel.app",
+      "logo": "https://ixwha.vercel.app/logo.png"
+    }
+    </script>
+    </body>
+</html>

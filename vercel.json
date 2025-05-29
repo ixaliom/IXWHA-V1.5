@@ -1,0 +1,52 @@
+{ 
+  "rewrites": [
+    {
+      "source": "/profil",
+      "destination": "/profil/profil.html"
+    },
+    {
+      "source": "/admin-panel",
+      "destination": "/admin/admin-panel.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/updates.json",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    }
+  ]
+} 

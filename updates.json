@@ -1,0 +1,133 @@
+{
+  "1.5.8": {
+    "date": "28/05/2025",
+    "features": [
+      "Ajout des du lien automatique desormais compatible avec Rimu Scans",
+      "Suppression des definitif des pubs",
+      "Modification du tutoriel"
+    ]
+  },
+  "1.5.7": {
+    "date": "26/05/2025",
+    "features": [
+      "✨ Ajout du support complet du mode hors-ligne avec Service Worker",
+      "🔄 Nouveau système de synchronisation en arrière-plan",
+      "📱 Page offline.html responsive avec support du mode sombre",
+      "🚀 Amélioration majeure du système de notifications Discord :",
+      "🔍 Amélioration du système de scraping avec support multi-proxy",
+      "💾 Optimisation du stockage local des données",
+      "🎨 Amélioration de l'interface de gestion des chapitres",
+      "⚡ Optimisation générale des performances"
+    ]
+  },
+  "1.5.5": {
+    "date": "26/05/2025",
+    "features": [
+      "Ajout des paramètres du site accessible sur ordinateur et mobile",
+      "Suppression des pubs",
+      "Refonte complète de l'interface mobile",
+      "Correction de bugs d'affichage et d'interaction",
+      "Modification du tutoriel"
+    ]
+  },
+  "1.5.1": {
+    "date": "20/04/2025",
+    "features": [
+      "Amelioration du scraping",
+      "Correction de bugs mineurs",
+      "Ajout de nouvelle categorie : <strong>Abandonnés et Favoris</strong>"
+    ]
+  },
+  "1.5.0": {
+    "date": "19/05/2025",
+    "features": [
+      "Nouveau système de scraping plus fiable et plus rapide",
+      "Amélioration majeure de la stabilité générale",
+      "Correction de nombreux bugs critiques",
+      "Optimisation des performances de l'application",
+      "Amélioration de l'interface de chargement"
+    ]
+  },
+  "1.4.7": {
+    "date": "19/05/2025",
+    "features": [
+      "Amélioration de la stabilité",
+      "Correction de bugs mineurs",
+      "Optimisation des performances"
+    ]
+  },
+  "1.4.4": {
+    "date": "14 mai 2025",
+    "features": [
+      "Update bot discord",
+      "Ajout panel admin"
+    ]
+  },
+  "1.4.3": {
+    "date": "14 mai 2025",
+    "features": [
+      "Modifications du script"
+    ]
+  },
+  "1.4.2": {
+    "date": "29 avril 2025",
+    "features": [
+      "Ajout de raccourcis clavier",
+      "Modification du style du profil",
+      "Correction de quelques bugs"
+    ]
+  },
+  "1.4.0": {
+    "date": "28 avril 2025",
+    "features": [
+      "Ajout de raccourcis clavier",
+      "Modification du style du profil",
+      "Correction de quelques bugs"
+    ]
+  },
+  "1.3.4": {
+    "date": "27 avril 2025",
+    "features": [
+      "Restructuration du code du profil",
+      "Modification complete du style du site"
+    ]
+  },
+  "1.3.2": {
+    "date": "16 avril 2025",
+    "features": [
+      "Correction des bugs du profil + Amélioration du style",
+      "Ajout de fonctionnalité du bot discord (ping mise à jour)"
+    ]
+  },
+  "1.3.1": {
+    "date": "15 avril 2025",
+    "features": [
+      "Correction du bouton <strong>Lire</strong> pour les liens <strong>Phenix Scans</strong>",
+      "Ajout d'un <strong>style spécial pour les téléphones</strong>"
+    ]
+  },
+  "1.2.0": {
+    "date": "13 avril 2025",
+    "features": [
+      "Ajout des favoris: marquez vos manhwas préférés avec une étoile",
+      "Extraction automatique des informations depuis les URLs",
+      "Réglage des bugs"
+    ]
+  },
+  "1.1.0": {
+    "date": "20 mars 2025",
+    "features": [
+      "Amélioration de l'interface sur mobile",
+      "Ajout de la recherche par titre",
+      "Correction de bugs mineurs sur la progression"
+    ]
+  },
+  "1.0.0": {
+    "date": "15 février 2025",
+    "features": [
+      "Première version stable",
+      "Suivi de progression de lecture",
+      "Interface adaptative"
+    ]
+  }
+}
