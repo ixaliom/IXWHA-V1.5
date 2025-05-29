@@ -729,18 +729,18 @@ async function extractInfoFromUrl(url) {
             // Liste des proxys à essayer avec des headers plus complets
             const proxyUrls = [
                 {
-                    url: `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                    url: `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
                     headers: {
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                        'Accept': 'application/json',
                         'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
                         'Referer': 'https://rimuscans.fr/'
                     }
                 },
                 {
-                    url: `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                    url: `https://corsproxy.io/?${encodeURIComponent(url)}`,
                     headers: {
-                        'Accept': 'application/json',
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                         'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
                         'Referer': 'https://rimuscans.fr/'
@@ -768,7 +768,7 @@ async function extractInfoFromUrl(url) {
 
                     const fetchData = async () => {
                         const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 15000); // Timeout augmenté à 15s
+                        const timeoutId = setTimeout(() => controller.abort(), 30000); // Timeout augmenté à 30s
 
                         try {
                             const response = await fetch(proxy.url, {
@@ -809,30 +809,43 @@ async function extractInfoFromUrl(url) {
             let doc = parser.parseFromString(data, 'text/html');
             
             // Récupération du titre
-            const titleElement = doc.querySelector('h1.entry-title');
+            const titleElement = doc.querySelector('h1.entry-title, h1[itemprop="name"]');
             if (titleElement) {
                 result.title = titleElement.textContent.trim();
                 console.log("Titre trouvé:", result.title);
             }
             
             // Récupération de l'image de couverture
-            const imageElement = doc.querySelector('div.summary_image img');
+            const imageElement = doc.querySelector('div.summary_image img, img.wp-post-image');
             if (imageElement) {
-                result.cover = imageElement.getAttribute('src');
-                console.log("Image trouvée:", result.cover);
+                const src = imageElement.getAttribute('src');
+                // Vérification si l'image est une URL complète
+                if (src && src.startsWith('http')) {
+                    result.cover = src;
+                    console.log("Image trouvée:", result.cover);
+                }
             }
             
             // Récupération du dernier chapitre
-            const chapterElements = doc.querySelectorAll('li.wp-manga-chapter a');
+            const chapterElements = doc.querySelectorAll('li.wp-manga-chapter a, .chapternum');
             if (chapterElements.length > 0) {
                 let maxChapter = 0;
                 chapterElements.forEach(element => {
                     const text = element.textContent.trim();
-                    const match = text.match(/chapitre\s+(\d+(?:\.\d+)?)\s*/i);
-                    if (match) {
-                        const chapterNumber = parseFloat(match[1]);
-                        if (!isNaN(chapterNumber) && chapterNumber > maxChapter) {
-                            maxChapter = chapterNumber;
+                    // Essayer différents formats de numéros de chapitres
+                    const matches = [
+                        /chapitre\s+(\d+(?:\.\d+)?)\s*/i,
+                        /\d+(?:\.\d+)?\s*$/
+                    ];
+                    
+                    for (const regex of matches) {
+                        const match = text.match(regex);
+                        if (match) {
+                            const chapterNumber = parseFloat(match[1]);
+                            if (!isNaN(chapterNumber) && chapterNumber > maxChapter) {
+                                maxChapter = chapterNumber;
+                            }
+                            break;
                         }
                     }
                 });
