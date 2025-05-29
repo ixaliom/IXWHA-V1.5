@@ -726,32 +726,53 @@ async function extractInfoFromUrl(url) {
             console.log("URL de Rimu Scans détectée");
             updateLoadingMessage("Connexion à Rimu Scans...");
             
-            // Liste des proxys à essayer
+            // Liste des proxys à essayer avec des headers plus complets
             const proxyUrls = [
-                `https://corsproxy.io/?${encodeURIComponent(url)}`,
-                `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+                {
+                    url: `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                    headers: {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                        'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                        'Referer': 'https://rimuscans.fr/'
+                    }
+                },
+                {
+                    url: `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                        'Referer': 'https://rimuscans.fr/'
+                    }
+                },
+                {
+                    url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+                    headers: {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                        'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                        'Referer': 'https://rimuscans.fr/'
+                    }
+                }
             ];
 
             let data = null;
             let proxyError = null;
 
             // Essayer chaque proxy jusqu'à ce qu'un fonctionne
-            for (const proxyUrl of proxyUrls) {
+            for (const proxy of proxyUrls) {
                 try {
-                    updateLoadingMessage("Tentative de recuperation des informations...");
-                    console.log("Tentative avec le proxy:", proxyUrl);
+                    updateLoadingMessage("Tentative de récupération des informations...");
+                    console.log("Tentative avec le proxy:", proxy.url);
 
                     const fetchData = async () => {
                         const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 10000);
+                        const timeoutId = setTimeout(() => controller.abort(), 15000); // Timeout augmenté à 15s
 
                         try {
-                            const response = await fetch(proxyUrl, {
-                                headers: {
-                                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                                    'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
-                                },
+                            const response = await fetch(proxy.url, {
+                                headers: proxy.headers,
                                 signal: controller.signal
                             });
 
@@ -762,7 +783,7 @@ async function extractInfoFromUrl(url) {
                             }
 
                             const responseData = await response.text();
-                            return proxyUrl.includes('allorigins.win') ? JSON.parse(responseData).contents : responseData;
+                            return proxy.url.includes('allorigins.win') ? JSON.parse(responseData).contents : responseData;
                         } catch (error) {
                             clearTimeout(timeoutId);
                             throw error;
@@ -770,10 +791,10 @@ async function extractInfoFromUrl(url) {
                     };
 
                     data = await fetchData();
-                    console.log("Proxy fonctionnel trouvé:", proxyUrl);
+                    console.log("Proxy fonctionnel trouvé:", proxy.url);
                     break;
                 } catch (e) {
-                    console.log("Échec du proxy:", proxyUrl, e);
+                    console.log("Échec du proxy:", proxy.url, e);
                     proxyError = e;
                     continue;
                 }
@@ -787,30 +808,30 @@ async function extractInfoFromUrl(url) {
             let parser = new DOMParser();
             let doc = parser.parseFromString(data, 'text/html');
             
-            // Récupération du titre avec le sélecteur exact
-            const titleElement = doc.querySelector('h1.entry-title[itemprop="name"]');
+            // Récupération du titre
+            const titleElement = doc.querySelector('h1.entry-title');
             if (titleElement) {
                 result.title = titleElement.textContent.trim();
                 console.log("Titre trouvé:", result.title);
             }
             
-            // Récupération de l'image de couverture avec le sélecteur exact
-            const imageElement = doc.querySelector('img.wp-post-image[itemprop="image"]');
+            // Récupération de l'image de couverture
+            const imageElement = doc.querySelector('div.summary_image img');
             if (imageElement) {
                 result.cover = imageElement.getAttribute('src');
                 console.log("Image trouvée:", result.cover);
             }
             
-            // Récupération du dernier chapitre avec le sélecteur exact
-            const chapterElements = doc.querySelectorAll('span.chapternum');
+            // Récupération du dernier chapitre
+            const chapterElements = doc.querySelectorAll('li.wp-manga-chapter a');
             if (chapterElements.length > 0) {
                 let maxChapter = 0;
                 chapterElements.forEach(element => {
                     const text = element.textContent.trim();
-                    const match = text.match(/chapitre\s+(\d+)/i);
+                    const match = text.match(/chapitre\s+(\d+(?:\.\d+)?)\s*/i);
                     if (match) {
-                        const chapterNumber = parseInt(match[1], 10);
-                        if (chapterNumber > maxChapter) {
+                        const chapterNumber = parseFloat(match[1]);
+                        if (!isNaN(chapterNumber) && chapterNumber > maxChapter) {
                             maxChapter = chapterNumber;
                         }
                     }
