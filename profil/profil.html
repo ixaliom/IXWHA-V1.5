@@ -1,0 +1,107 @@
+1<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IXWHA | Profil</title>
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/profil/styles-profile.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="site-logo">
+                <svg width="120" height="32" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 6V26" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20 6L32 26M32 6L20 26" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M44 6L50 20L56 10L62 20L68 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M80 6V26M92 6V26M80 16H92" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M104 26L112 6L120 26M107 18H117" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <a href="https://ixwha.vercel.app/" class="button secondary">← Retour à la bibliothèque</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="profile-section">
+            <div class="profile-header">
+                <div class="profile-avatar">P</div>
+                <div>
+                    <h2>Profil Utilisateur</h2>
+                    <p>Votre bibliothèque de manhwas</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalManhwas">0</div>
+                    <div>Total Manhwas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="inProgressManhwas">0</div>
+                    <div>En cours</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedManhwas">0</div>
+                    <div>Terminés</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="reading-stats">
+            <div class="reading-stats-card">
+                <h3>Temps de lecture estimé</h3>
+                <div class="reading-stats-value" id="totalReadingTime">0 heures</div>
+            </div>
+            <div class="reading-stats-card">
+                <h3>Progression moyenne</h3>
+                <div class="reading-stats-value" id="averageProgress">0%</div>
+            </div>
+        </div>
+
+        <div class="export-section">
+            <h3>Exporter vos données</h3>
+            <div>
+                <button class="button" id="exportJsonBtn">Exporter en JSON</button>
+            </div>
+        </div>
+
+        <div class="export-section">
+            <div>
+                <h3>Importer des données</h3>
+                <p>Importez une sauvegarde précédente de votre bibliothèque</p>
+            </div>
+            <input type="file" id="importInput" accept=".json" style="display:none;">
+            <button class="button" id="importBtn">Importer JSON</button>
+            
+            <div id="importSuccessPopup">
+                Données importées avec succès !
+            </div>
+        </div>
+
+        <div class="danger-zone">
+            <h3>Zone de danger ⚠️</h3>
+            <p>Actions irréversibles affectant votre bibliothèque</p>
+            <div class="danger-buttons">
+                <button class="button danger" id="deleteDataBtn">Supprimer toutes les données</button>
+                <button class="button warning" id="resetProgressBtn">Réinitialiser toute progression</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de confirmation de suppression -->
+    <div class="modal" id="deleteDataModal">
+        <div class="modal-content">
+            <h2>⚠️ Attention</h2>
+            <p>Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.</p>
+            <div class="modal-buttons">
+                <button class="button danger" id="confirmDeleteBtn">Supprimer</button>
+                <button class="button secondary" id="cancelDeleteBtn">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/profil/script-profile.js"></script>
+</body>
+</html>
