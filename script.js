@@ -15,7 +15,7 @@ let settings = {
     cardSize: 'medium',
     defaultSort: 'title'
 };
-const APP_VERSION = '1.5.9';
+const APP_VERSION = '1.5.8';
 const NOTIFICATIONS_KEY = "ixwha_notifications";
 const VISIT_COUNTER_KEY = "ixwha_visit_counter";
 const DISCORD_NOTIFICATION_SENT_KEY = "ixwha_discord_notification_sent";
@@ -723,7 +723,7 @@ async function extractInfoFromUrl(url) {
         if (url.includes('phenix-scans.com')) {
             // ... existing phenix-scans code ...
         } else if (url.includes('rimuscans.fr')) {
-            console.log("URL de Rimu Scans détectée");
+            console.log("URL de Rimu Scans détectée:", url);
             updateLoadingMessage("Connexion à Rimu Scans...");
             
             // Liste des proxys à essayer avec des headers plus complets
@@ -759,45 +759,68 @@ async function extractInfoFromUrl(url) {
 
             let data = null;
             let proxyError = null;
+            let proxyAttempts = [];
 
             // Essayer chaque proxy jusqu'à ce qu'un fonctionne
             for (const proxy of proxyUrls) {
                 try {
                     updateLoadingMessage("Tentative de récupération des informations...");
-                    console.log("Tentative avec le proxy:", proxy.url);
+                    console.log("\nNouvelle tentative avec le proxy:", proxy.url);
+                    console.log("Headers envoyés:", proxy.headers);
+                    proxyAttempts.push(proxy.url);
 
                     const fetchData = async () => {
                         const controller = new AbortController();
                         const timeoutId = setTimeout(() => controller.abort(), 30000); // Timeout augmenté à 30s
 
                         try {
+                            console.log("Envoi de la requête...");
                             const response = await fetch(proxy.url, {
                                 headers: proxy.headers,
                                 signal: controller.signal
                             });
 
                             clearTimeout(timeoutId);
-
+                            console.log("Réponse reçue, status:", response.status);
+                            
                             if (!response.ok) {
+                                console.log("Status non OK:", response.status, await response.text());
                                 throw new Error(`HTTP error! status: ${response.status}`);
                             }
 
+                            console.log("Lecture de la réponse...");
                             const responseData = await response.text();
-                            return proxy.url.includes('allorigins.win') ? JSON.parse(responseData).contents : responseData;
+                            
+                            if (proxy.url.includes('allorigins.win')) {
+                                console.log("Parsing JSON...");
+                                const parsed = JSON.parse(responseData);
+                                console.log("Contenu JSON récupéré:", parsed.contents.substring(0, 500) + '...');
+                                return parsed.contents;
+                            } else {
+                                console.log("Contenu HTML récupéré:", responseData.substring(0, 500) + '...');
+                                return responseData;
+                            }
                         } catch (error) {
                             clearTimeout(timeoutId);
+                            console.error("Erreur lors de la requête:", error);
                             throw error;
                         }
                     };
 
                     data = await fetchData();
-                    console.log("Proxy fonctionnel trouvé:", proxy.url);
+                    console.log("\nProxy fonctionnel trouvé:", proxy.url);
+                    console.log("Taille des données reçues:", data.length, "caractères");
                     break;
                 } catch (e) {
-                    console.log("Échec du proxy:", proxy.url, e);
+                    console.error("Échec du proxy:", proxy.url, e);
                     proxyError = e;
+                    console.error("Stack trace:", e.stack);
                     continue;
                 }
+            }
+
+            if (!data) {
+                throw new Error(`Tous les proxys (${proxyAttempts.join(', ')}) ont échoué: ${proxyError?.message}`);
             }
 
             if (!data) {
@@ -808,11 +831,19 @@ async function extractInfoFromUrl(url) {
             let parser = new DOMParser();
             let doc = parser.parseFromString(data, 'text/html');
             
+            // Logs détaillés de la structure HTML
+            console.log("\nStructure HTML récupérée:");
+            console.log("Titre de la page:", doc.title);
+            console.log("Nombre d'éléments trouvés:", doc.body.getElementsByTagName('*').length);
+            
             // Récupération du titre
             const titleElement = doc.querySelector('h1.entry-title, h1[itemprop="name"]');
             if (titleElement) {
                 result.title = titleElement.textContent.trim();
                 console.log("Titre trouvé:", result.title);
+                console.log("HTML du titre:", titleElement.outerHTML);
+            } else {
+                console.log("Aucun élément de titre trouvé avec les sélecteurs:", 'h1.entry-title, h1[itemprop="name"]');
             }
             
             // Récupération de l'image de couverture
@@ -823,15 +854,25 @@ async function extractInfoFromUrl(url) {
                 if (src && src.startsWith('http')) {
                     result.cover = src;
                     console.log("Image trouvée:", result.cover);
+                    console.log("HTML de l'image:", imageElement.outerHTML);
+                } else {
+                    console.log("URL d'image invalide:", src);
                 }
+            } else {
+                console.log("Aucun élément d'image trouvé avec les sélecteurs:", 'div.summary_image img, img.wp-post-image');
             }
             
             // Récupération du dernier chapitre
             const chapterElements = doc.querySelectorAll('li.wp-manga-chapter a, .chapternum');
+            console.log("Nombre d'éléments de chapitres trouvés:", chapterElements.length);
+            
             if (chapterElements.length > 0) {
                 let maxChapter = 0;
+                let successfulMatches = 0;
                 chapterElements.forEach(element => {
                     const text = element.textContent.trim();
+                    console.log("\nAnalyse du chapitre:", text);
+                    
                     // Essayer différents formats de numéros de chapitres
                     const matches = [
                         /chapitre\s+(\d+(?:\.\d+)?)\s*/i,
@@ -842,10 +883,18 @@ async function extractInfoFromUrl(url) {
                         const match = text.match(regex);
                         if (match) {
                             const chapterNumber = parseFloat(match[1]);
-                            if (!isNaN(chapterNumber) && chapterNumber > maxChapter) {
-                                maxChapter = chapterNumber;
+                            if (!isNaN(chapterNumber)) {
+                                console.log("Match trouvé:", match[1], "->", chapterNumber);
+                                if (chapterNumber > maxChapter) {
+                                    maxChapter = chapterNumber;
+                                }
+                                successfulMatches++;
+                            } else {
+                                console.log("NaN détecté pour:", match[1]);
                             }
                             break;
+                        } else {
+                            console.log("Aucun match avec regex:", regex.toString());
                         }
                     }
                 });
@@ -854,7 +903,12 @@ async function extractInfoFromUrl(url) {
                     result.totalChapters = maxChapter;
                     document.getElementById('chaptersInput').value = maxChapter;
                     console.log("Nombre de chapitres trouvé:", maxChapter);
+                    console.log("Nombre de matches réussis:", successfulMatches);
+                } else {
+                    console.log("Aucun numéro de chapitre valide trouvé");
                 }
+            } else {
+                console.log("Aucun élément de chapitre trouvé avec les sélecteurs:", 'li.wp-manga-chapter a, .chapternum');
             }
             
             // Vérification des informations manquantes
