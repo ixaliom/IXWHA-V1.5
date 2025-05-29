@@ -79,33 +79,11 @@ async function loadLibrary() {
     renderLibrary();
 }
 
-// Service Worker pour le support offline
-async function registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-        try {
-            const registration = await navigator.serviceWorker.register('/service-worker.js');
-            console.log('Service Worker enregistré avec succès:', registration.scope);
-            
-            // Écouter les messages du Service Worker
-            navigator.serviceWorker.addEventListener('message', event => {
-                if (event.data.type === 'CACHE_UPDATED') {
-                    console.log('Cache mis à jour:', event.data.url);
-                }
-            });
-            
-            return registration;
-        } catch (error) {
-            console.error('Erreur lors de l\'enregistrement du Service Worker:', error);
-        }
-    }
-}
+
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Enregistrer le Service Worker
-        await registerServiceWorker();
-        
         // Charger les données
         await loadLibrary();
         loadSettings();
