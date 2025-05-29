@@ -15,7 +15,7 @@ let settings = {
     cardSize: 'medium',
     defaultSort: 'title'
 };
-const APP_VERSION = '1.5.8';
+const APP_VERSION = '1.5.9';
 const NOTIFICATIONS_KEY = "ixwha_notifications";
 const VISIT_COUNTER_KEY = "ixwha_visit_counter";
 const DISCORD_NOTIFICATION_SENT_KEY = "ixwha_discord_notification_sent";
